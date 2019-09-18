@@ -26,10 +26,10 @@ class HugoPlugin implements Plugin<Project> {
     }
 
     project.dependencies {
-      debugCompile 'it.sephiroth.hugo:hugo-runtime:1.2.4-SNAPSHOT'
+      debugCompile 'it.sephiroth.hugo:hugo-runtime:1.2.5'
       // TODO this should come transitively
       debugCompile 'org.aspectj:aspectjrt:1.8.6'
-      compile 'it.sephiroth.hugo:hugo-annotations:1.2.4-SNAPSHOT'
+      compile 'it.sephiroth.hugo:hugo-annotations:1.2.5'
     }
 
     project.extensions.create('hugo', HugoExtension)
