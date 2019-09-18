@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 @Aspect
 public class Hugo {
   private static volatile boolean enabled = true;
+  private static volatile boolean exitEnabled = false;
 
   @Pointcut("within(@hugo.weaving.DebugLog *)")
   public void withinAnnotatedClass() {}
@@ -37,6 +38,10 @@ public class Hugo {
 
   public static void setEnabled(boolean enabled) {
     Hugo.enabled = enabled;
+  }
+
+  public static void setExitEnabled(boolean enabled) {
+    Hugo.exitEnabled = enabled;
   }
 
   @Around("method() || constructor()")
@@ -92,6 +97,8 @@ public class Hugo {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
       Trace.endSection();
     }
+
+    if(!exitEnabled) return;
 
     Signature signature = joinPoint.getSignature();
 
