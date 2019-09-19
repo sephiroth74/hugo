@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 public class Hugo {
   private static volatile boolean enabled = true;
   private static volatile boolean exitEnabled = false;
+  private static volatile int priority = Log.INFO;
 
   @Pointcut("within(@hugo.weaving.DebugLog *)")
   public void withinAnnotatedClass() {}
@@ -43,6 +44,8 @@ public class Hugo {
   public static void setExitEnabled(boolean enabled) {
     Hugo.exitEnabled = enabled;
   }
+
+  public static void setPriority(int priority) { Hugo.priority = priority; }
 
   @Around("method() || constructor()")
   public Object logAndExecute(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -83,7 +86,7 @@ public class Hugo {
       builder.append(" [Thread:\"").append(Thread.currentThread().getName()).append("\"]");
     }
 
-    Log.v(asTag(cls), builder.toString());
+    Log.println(Hugo.priority, asTag(cls), builder.toString());
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
       final String section = builder.toString().substring(2);
@@ -118,7 +121,7 @@ public class Hugo {
       builder.append(Strings.toString(result));
     }
 
-    Log.v(asTag(cls), builder.toString());
+    Log.println(priority, asTag(cls), builder.toString());
   }
 
   private static String asTag(Class<?> cls) {
